@@ -13,6 +13,7 @@
         }
     ],
     "env": {
-        "PYTHONUNBUFFERED": "1"
+        "PYTHONPATH": ".",
+        "FLASK_ENV": "production"
     }
 } 

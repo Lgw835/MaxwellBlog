@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from pymongo import MongoClient
-import markdown
+import markdown2
 from datetime import datetime
 from functools import wraps
 import os
@@ -68,8 +68,32 @@ def post(post_id):
     # 获取单篇文章
     post = posts.find_one({'_id': post_id})
     if post:
-        # 将Markdown转换为HTML
-        post['content'] = markdown.markdown(post['content'])
+        # 使用 markdown2 with extras 进行转换
+        extras = [
+            "fenced-code-blocks",   # 支持围栏式代码块
+            "tables",               # 支持表格
+            "break-on-newline",     # 支持换行
+            "header-ids",           # 标题ID
+            "highlighter",          # 代码高亮
+            "metadata",             # 元数据
+            "footnotes",            # 脚注
+            "strike",               # 删除线
+            "task_list",            # 任务列表
+            "wiki-tables",          # 维基风格表格支持
+            "attr_list",            # 属性列表
+            "cuddled-lists"         # 更好的列表支持
+        ]
+        
+        markdown_converter = markdown2.Markdown(extras=extras)
+        html_content = markdown_converter.convert(post['content'])
+        
+        # 增强表格样式
+        html_content = html_content.replace(
+            '<table>',
+            '<table class="markdown-table table table-bordered table-hover">'
+        )
+        
+        post['content'] = html_content
     return render_template('post.html', post=post, is_admin='admin' in session)
 
 @app.route('/admin', methods=['GET', 'POST'])

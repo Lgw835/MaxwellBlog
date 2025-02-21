@@ -7,6 +7,7 @@
     <!-- Vditor 依赖 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor@3.9.6/dist/index.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
     <header>
@@ -27,9 +28,18 @@
                     </div>
                     <div class="auth-buttons">
                         {% if is_admin %}
-                        <a href="{{ url_for('logout') }}" class="auth-btn logout-btn">退出登录</a>
+                        <div class="d-flex align-items-center">
+                            <a href="{{ url_for('admin') }}" class="auth-btn" title="写文章">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="{{ url_for('logout') }}" class="auth-btn logout-btn" title="退出">
+                                <i class="bi bi-box-arrow-right"></i>
+                            </a>
+                        </div>
                         {% else %}
-                        <a href="{{ url_for('login') }}" class="auth-btn login-btn">管理员登录</a>
+                        <a href="{{ url_for('login') }}" class="auth-btn login-btn" title="登录">
+                            <i class="bi bi-person-circle"></i>
+                        </a>
                         {% endif %}
                     </div>
                 </div>
