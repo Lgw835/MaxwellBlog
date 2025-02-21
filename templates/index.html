@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="posts-grid">
+    {% set posts_list = posts|list %}
+    {% if posts_list|length == 0 and search %}
+    <div class="no-results">
+        <h2>未找到相关文章</h2>
+        <p>搜索"{{ search }}"没有找到匹配的结果</p>
+    </div>
+    {% else %}
+    {% for post in posts_list %}
+    <article class="post-card">
+        {% if post.cover_image %}
+        <div class="post-image">
+            <img src="{{ post.cover_image }}" alt="{{ post.title }}">
+        </div>
+        {% endif %}
+        <div class="post-content">
+            <div class="post-meta">
+                <time datetime="{{ post.date.strftime('%Y-%m-%d') }}">
+                    {{ post.date.strftime('%Y-%m-%d') }}
+                </time>
+                {% if is_admin %}
+                <div class="post-actions">
+                    <button class="edit-btn" onclick="window.location.href='/admin?edit={{ post._id }}'">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                        </svg>
+                    </button>
+                    <button class="delete-btn" onclick="deletePost('{{ post._id }}')">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                        </svg>
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+            <h2 class="post-title">
+                <a href="{{ url_for('post', post_id=post._id) }}">{{ post.title }}</a>
+            </h2>
+            <div class="post-summary">
+                {{ post.summary }}
+            </div>
+            <a href="{{ url_for('post', post_id=post._id) }}" class="read-more">
+                阅读全文
+                <span class="arrow">→</span>
+            </a>
+        </div>
+    </article>
+    {% endfor %}
+    {% endif %}
+</div>
+
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>确认删除</h3>
+        <p>确定要删除这篇文章吗？此操作不可恢复。</p>
+        <div class="modal-actions">
+            <button class="cancel-btn" onclick="closeModal()">取消</button>
+            <button class="confirm-btn" onclick="confirmDelete()">确认删除</button>
+        </div>
+    </div>
+</div>
+{% endblock %} 

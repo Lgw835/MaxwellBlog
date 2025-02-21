@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人博客</title>
+    <!-- Vditor 依赖 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor@3.9.6/dist/index.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="top-header">
+            <div class="container">
+                <div class="brand">
+                    <h1><a href="/">Maxwell's Blog</a></h1>
+                    <p class="subtitle">记录生活，分享技术</p>
+                </div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="搜索文章..." value="{{ search or '' }}">
+                        <button type="button" onclick="search()">
+                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                <path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="auth-buttons">
+                        {% if is_admin %}
+                        <a href="{{ url_for('logout') }}" class="auth-btn logout-btn">退出登录</a>
+                        {% else %}
+                        <a href="{{ url_for('login') }}" class="auth-btn login-btn">管理员登录</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <ul>
+                    <li><a href="/">首页</a></li>
+                    {% if is_admin %}
+                    <li><a href="/admin">写文章</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Maxwell's Blog. Powered by Flask & MongoDB.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/vditor@3.9.6/dist/index.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 

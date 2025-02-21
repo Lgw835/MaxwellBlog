@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="editor-container">
+    <h2>{{ '编辑文章' if post else '写新文章' }}</h2>
+    <form method="POST" id="postForm" data-is-edit="{{ 'true' if post else 'false' }}" {% if post %}data-content="{{ post.content }}"{% endif %}>
+        {% if post %}
+        <input type="hidden" name="edit_id" value="{{ post._id }}">
+        {% endif %}
+        <div class="form-group">
+            <label for="title">标题</label>
+            <input type="text" id="title" name="title" required value="{{ post.title if post else '' }}">
+        </div>
+        <div class="form-group">
+            <label for="cover">封面图片</label>
+            <div class="cover-upload">
+                <div id="cover-preview" class="cover-preview {% if post and post.cover_image %}has-image{% endif %}"
+                     {% if post and post.cover_image %}style="background-image: url('{{ post.cover_image }}')"{% endif %}>
+                    <span>点击或拖拽上传封面图片</span>
+                </div>
+                <input type="file" id="cover" accept="image/*" class="cover-input">
+                <input type="hidden" id="cover-url" name="cover_image" value="{{ post.cover_image if post else '' }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="summary">文章简介</label>
+            <textarea id="summary" name="summary" rows="3" placeholder="请输入文章简介（建议100字以内）" required>{{ post.summary if post else '' }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="vditor">内容</label>
+            <div id="vditor" class="vditor"></div>
+            <input type="hidden" id="content" name="content" value="{{ post.content if post else '' }}">
+        </div>
+        <div class="form-actions">
+            <button type="button" onclick="submitPost()" class="primary-button">{{ '保存修改' if post else '发布文章' }}</button>
+            <button type="button" class="secondary-button" onclick="saveDraft()">保存草稿</button>
+        </div>
+    </form>
+</div>
+{% endblock %} 
